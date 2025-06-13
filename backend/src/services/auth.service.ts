@@ -35,8 +35,8 @@ class AuthService {
  private generateToken(user: IUser, expiresIn?: string): string {
   return jwt.sign(
     { id: user._id, email: user.email, role: user.role },
-    config.JWT_SECRET,
-    { expiresIn: expiresIn  }
+    config.JWT_SECRET as string,
+    { expiresIn: config.JWT_EXPIRE }
   );
 }
 

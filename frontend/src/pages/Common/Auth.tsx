@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import { toast } from 'react-toastify';
-import { register, login, forgotPassword } from '../../services/auth.service'
-import { useNavigate } from 'react-router-dom';;
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 
 const AuthPage = () => {
+   const { login, register } = useAuth();
 const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
     username: '',
@@ -33,6 +34,7 @@ const [isLogin, setIsLogin] = useState(true);
     setShowConfirmPassword(!showConfirmPassword);
   };
 
+  
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -43,26 +45,17 @@ const [isLogin, setIsLogin] = useState(true);
 
     try {
       if (isLogin) {
-        await login({
-          email: formData.email,
-          password: formData.password
-        });
+        await login(formData.email, formData.password);
       } else {
         await register(formData);
       }
-      navigate('/dashboard'); // Redirect to dashboard after successful auth
-    } catch (error) {
-      console.error('Authentication error:', error);
+      navigate('/dashboard');
+    } catch (error: any) {
+      toast.error(error.message || 'Authentication failed');
     }
   };
 
-  const handleForgotPassword = async () => {
-    if (!formData.email) {
-      toast.error('Please enter your email first');
-      return;
-    }
-    await forgotPassword(formData.email);
-  };
+
 
   const toggleAuthMode = () => {
     setIsLogin(!isLogin);
@@ -96,7 +89,7 @@ const [isLogin, setIsLogin] = useState(true);
               <input
                 type="text"
                 id="fullname"
-                name="fullName"
+                name="username"
                 value={formData.username}
                 onChange={handleInputChange}
                 className="w-full px-4 py-3 bg-gray-800 border border-gray-600 text-white rounded-lg placeholder-gray-500 focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300"
@@ -131,7 +124,7 @@ const [isLogin, setIsLogin] = useState(true);
               </label>
               <select
                 id="type"
-                name="type"
+                name="role"
                 value={formData.role}
                 onChange={handleInputChange}
                 className="w-full px-4 py-3 bg-gray-800 border border-gray-600 text-white rounded-lg focus:outline-none focus:border-purple-500 focus:ring-2 focus:ring-purple-500/20 transition-all duration-300"

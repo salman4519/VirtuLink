@@ -6,7 +6,11 @@ const userSchema = new Schema<IUser, UserModel, IUserMethods>({
   username: { type: String, required: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  role: { type: String, enum: ['attendee', 'host'], required: true }
+  role: { type: String, enum: ['attendee', 'host'], required: true },
+  phone: { type: String, default: '' },
+  dob: { type: String, default: '' },
+  bio: { type: String, default: '' },
+  avatar: { type: String, default: '' },
 }, {
   timestamps: true
 });

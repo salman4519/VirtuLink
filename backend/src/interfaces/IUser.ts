@@ -6,6 +6,10 @@ export interface IUser {
   email: string;
   password: string;
   role: 'attendee' | 'host' | 'admin';
+  avatar?:string;
+  bio?:string;
+  phone?:string;
+  dob?:string;
   createdAt?: Date;
   updatedAt?: Date;
 }
