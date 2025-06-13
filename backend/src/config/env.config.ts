@@ -8,11 +8,19 @@ interface Config {
   JWT_EXPIRE: string;
 }
 
+function getEnvVar(name: string): string {
+  const value = process.env[name];
+  if (!value) {
+    throw new Error(`Missing required environment variable: ${name}`);
+  }
+  return value;
+}
+
 const config: Config = {
   PORT: Number(process.env.PORT) || 5000,
-  MONGO_URI: process.env.MONGO_URI || 'mongodb://localhost:27017/mern-auth',
-  JWT_SECRET: process.env.JWT_SECRET || 'your-secret-key',
-  JWT_EXPIRE: process.env.JWT_EXPIRE || '1d',
+  MONGO_URI: getEnvVar('MONGO_URI'),
+  JWT_SECRET: getEnvVar('JWT_SECRET'),
+  JWT_EXPIRE: getEnvVar('JWT_EXPIRE'),
 };
 
 export default config;

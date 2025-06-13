@@ -1,74 +1,43 @@
 import axios from 'axios';
-import { toast } from 'react-toastify';
 
 const API_URL = 'http://localhost:5000/api/auth';
 
 interface UserData {
-  fullName?: string;
+  username?: string;
   email: string;
-  type?: string;
+  role?: string;
   password: string;
   confirmPassword?: string;
 }
 
 export const register = async (userData: UserData) => {
-  try {
-    const response = await axios.post(`${API_URL}/register`, {
-      fullName: userData.fullName,
-      email: userData.email,
-      type: userData.type,
-      password: userData.password
-    });
-
-    if (response.data) {
-      localStorage.setItem('user', JSON.stringify(response.data));
-      toast.success('Registration successful!');
-    }
-
-    return response.data;
-  } catch (error: any) {
-    const message =
-      error.response?.data?.message || error.message || error.toString();
-    toast.error(message);
-    throw error;
-  }
+  const response = await axios.post(`${API_URL}/register`, {
+    username: userData.username,
+    email: userData.email,
+    role: userData.role || "attendee" ,
+    password: userData.password
+  });
+  return response.data;
 };
 
-export const login = async (userData: Omit<UserData, 'fullName' | 'type' | 'confirmPassword'>) => {
-  try {
-    const response = await axios.post(`${API_URL}/login`, {
-      email: userData.email,
-      password: userData.password
-    });
-
-    if (response.data) {
-      localStorage.setItem('user', JSON.stringify(response.data));
-      toast.success('Login successful!');
-    }
-
-    return response.data;
-  } catch (error: any) {
-    const message =
-      error.response?.data?.message || error.message || error.toString();
-    toast.error(message);
-    throw error;
+export const login = async (credentials: { email: string; password: string }) => {
+  const response = await axios.post(`${API_URL}/login`, credentials);
+  if (response.data.token) {
+    localStorage.setItem('user', JSON.stringify(response.data));
   }
+  return response.data;
+};
+
+export const forgotPassword = async (email: string) => {
+  const response = await axios.post(`${API_URL}/forgot-password`, { email });
+  return response.data;
 };
 
 export const logout = () => {
   localStorage.removeItem('user');
-  toast.success('Logged out successfully!');
 };
 
-export const forgotPassword = async (email: string) => {
-  try {
-    const response = await axios.post(`${API_URL}/forgot-password`, { email });
-    toast.success(response.data.message);
-    return response.data;
-  } catch (error: any) {
-    const message =
-      error.response?.data?.message || error.message || error.toString();
-    toast.error(message);
-    throw error;
-  }
+export const getCurrentUser = () => {
+  const userStr = localStorage.getItem('user');
+  return userStr ? JSON.parse(userStr) : null;
 };
