@@ -44,37 +44,37 @@ const Sidebar = () => {
             <SidebarItem 
               icon={<RiDashboardLine className="ri-lg" />} 
               text="Dashboard" 
-              active={getActiveState('/dashboard')}
+              active={getActiveState('/admin/dashboard')}
               onClick={() => setMobileMenuOpen(false)}
-              href="/dashboard"
+              href="/admin/dashboard"
             />
             <SidebarItem 
               icon={<FaUsers className="ri-lg" />} 
               text="Users" 
-              active={getActiveState('/users')}
+              active={getActiveState('/admin/users')}
               onClick={() => setMobileMenuOpen(false)}
-              href="/users"
+              href="/admin/users"
             />
             <SidebarItem 
               icon={<MdEventNote className="ri-lg" />} 
               text="Events" 
-              active={getActiveState('/events')}
+              active={getActiveState('/admin/events')}
               onClick={() => setMobileMenuOpen(false)}
-              href="/events"
+              href="/admin/events"
             />
             <SidebarItem 
               icon={<RiMoneyDollarCircleLine className="ri-lg" />} 
               text="Revenue" 
-              active={getActiveState('/event-list')}
+              active={getActiveState('/admin/revenue')}
               onClick={() => setMobileMenuOpen(false)}
-              href="/revenue"
+              href="/admin/revenue"
             />
             <SidebarItem 
               icon={<RiUserLine className="ri-lg" />} 
               text="Profile" 
-              active={getActiveState('/admin-profile')}
+              active={getActiveState('/admin/profile')}
               onClick={() => setMobileMenuOpen(false)}
-              href="/admin-profile"
+              href="/admin/profile"
             />
           </div>
         </nav>

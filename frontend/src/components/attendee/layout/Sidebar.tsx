@@ -43,30 +43,30 @@ const Sidebar = () => {
             <SidebarItem 
               icon={<RiDashboardLine className="ri-lg" />} 
               text="Dashboard" 
-              active={getActiveState('/dashboard')}
+              active={getActiveState('/attendee/dashboard')}
               onClick={() => setMobileMenuOpen(false)}
-              href="/dashboard"
+              href="/attendee/dashboard"
             />
             <SidebarItem 
               icon={<RiCalendarCheckLine className="ri-lg" />} 
               text="My Events" 
-              active={getActiveState('/events')}
+              active={getActiveState('/attendee/my-events')}
               onClick={() => setMobileMenuOpen(false)}
-              href="/events"
+              href="/attendee/my-events"
             />
             <SidebarItem 
               icon={<RiListCheck className="ri-lg" />} 
               text="Event List" 
-              active={getActiveState('/event-list')}
+              active={getActiveState('/attendee/event-list')}
               onClick={() => setMobileMenuOpen(false)}
-              href="/event-list"
+              href="/attendee/event-list"
             />
             <SidebarItem 
               icon={<RiUserLine className="ri-lg" />} 
               text="Profile" 
-              active={getActiveState('/profile')}
+              active={getActiveState('/attendee/profile')}
               onClick={() => setMobileMenuOpen(false)}
-              href="/profile"
+              href="/attendee/profile"
             />
           </div>
         </nav>

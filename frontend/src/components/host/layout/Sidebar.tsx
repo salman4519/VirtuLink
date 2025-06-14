@@ -43,30 +43,30 @@ const Sidebar = () => {
             <SidebarItem 
               icon={<RiDashboardLine className="ri-lg" />} 
               text="Dashboard" 
-              active={getActiveState('/dashboard')}
+              active={getActiveState('/host/dashboard')}
               onClick={() => setMobileMenuOpen(false)}
-              href="/dashboard"
+              href="/host/dashboard"
             />
             <SidebarItem 
               icon={<RiCalendarCheckLine className="ri-lg" />} 
               text="My Events" 
-              active={getActiveState('/events')}
+              active={getActiveState('/host/my-events')}
               onClick={() => setMobileMenuOpen(false)}
-              href="/events"
+              href="/host/my-events"
             />
             <SidebarItem 
               icon={<IoIosAddCircleOutline className="ri-lg" />} 
               text="Create Event" 
-              active={getActiveState('/event-list')}
+              active={getActiveState('/host/create-event')}
               onClick={() => setMobileMenuOpen(false)}
-              href="/event-list"
+              href="/host/create-event"
             />
             <SidebarItem 
               icon={<RiUserLine className="ri-lg" />} 
               text="Profile" 
-              active={getActiveState('/host-profile')}
+              active={getActiveState('/host/profile')}
               onClick={() => setMobileMenuOpen(false)}
-              href="/profile"
+              href="/host/profile"
             />
           </div>
         </nav>
