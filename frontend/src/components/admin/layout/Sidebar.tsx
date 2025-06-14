@@ -51,30 +51,30 @@ const Sidebar = () => {
             <SidebarItem 
               icon={<FaUsers className="ri-lg" />} 
               text="Users" 
-              active={getActiveState('/events')}
+              active={getActiveState('/users')}
               onClick={() => setMobileMenuOpen(false)}
-              href="/events"
+              href="/users"
             />
             <SidebarItem 
               icon={<MdEventNote className="ri-lg" />} 
               text="Events" 
-              active={getActiveState('/event-list')}
+              active={getActiveState('/events')}
               onClick={() => setMobileMenuOpen(false)}
-              href="/event-list"
+              href="/events"
             />
             <SidebarItem 
               icon={<RiMoneyDollarCircleLine className="ri-lg" />} 
               text="Revenue" 
               active={getActiveState('/event-list')}
               onClick={() => setMobileMenuOpen(false)}
-              href="/event-list"
+              href="/revenue"
             />
             <SidebarItem 
               icon={<RiUserLine className="ri-lg" />} 
               text="Profile" 
               active={getActiveState('/admin-profile')}
               onClick={() => setMobileMenuOpen(false)}
-              href="/profile"
+              href="/admin-profile"
             />
           </div>
         </nav>
