@@ -142,7 +142,7 @@ const LandingPage: React.FC = () => {
 
           <div className="flex items-center space-x-4">
             <a
-              href="/login"
+              href="/auth"
               className="hidden md:block px-5 py-2 border border-primary text-white rounded-full font-medium hover:bg-primary/10 transition-all whitespace-nowrap"
             >
               Login / Register
