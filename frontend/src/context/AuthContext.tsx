@@ -1,43 +1,101 @@
-import { createContext, useContext,type ReactNode, useState, useEffect } from 'react';
-import { getCurrentUser, login as loginService, register as registerService, logout as logoutService } from '../services/auth.service';
+import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { AuthService } from '../services/auth.service'
+import { User, AuthContextType,  RegisterData } from '../types';
+import { toast } from 'sonner';
+import { useAuthStore } from '../store/authStore'; // Import useAuthStore
 
-interface AuthContextType {
-  user: any;
-  loading: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  register: (userData: any) => Promise<void>;
-  logout: () => void;
-}
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContext  = createContext<AuthContextType | null>(null);
 
+// context/AuthContext.tsx
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const [user, setLocalUser] = useState<User | null>(null); // Renamed to setLocalUser to avoid conflict
+  const { setUser: setAuthStoreUser } = useAuthStore(); // Get setUser from AuthStore
+  const [loading, setLoading] = useState(true); // Initialize loading state
+  //const navigate = useNavigate();
 
   useEffect(() => {
-    const user = getCurrentUser();
-    setUser(user);
-    setLoading(false);
+    // Check for existing auth state
+    const storedUser = localStorage.getItem('user');
+    if (storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        setLocalUser(parsedUser);
+        setAuthStoreUser(parsedUser); // Also set user in AuthStore
+      } catch (error) {
+        console.error('Failed to parse user data', error);
+        localStorage.removeItem('user');
+      }
+    }
+    setLoading(false); // Set loading to false after initialization
   }, []);
 
-  const login = async (email: string, password: string) => {
-    const response = await loginService({ email, password });
-    setUser(response.user);
+  const login = async (email: string, password: string,navigate: (path: string) => void) => {
+    setLoading(true);
+    try {
+      const response = await AuthService.login({ email, password });
+
+      if (response.data) {
+        setLocalUser(response.data.user);
+        setAuthStoreUser(response.data.user); // Also set user in AuthStore
+        localStorage.setItem('user', JSON.stringify(response.data.user));
+        localStorage.setItem('token', response.data.token);
+        navigate(`/${response.data.user.role}/profile`);
+      } else if (response.error) {
+        toast.error(response.error);
+      }
+
+      return response;
+
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const register = async (userData: any) => {
-    const response = await registerService(userData);
-    setUser(response.user);
+  const register = async (userData: RegisterData) => {
+    setLoading(true);
+    try {
+      const response = await AuthService.register(userData);
+      console.log(response,'res[')
+      return response;
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const logout = () => {
-    logoutService();
-    setUser(null);
+  const logout = (navigate: (path: string) => void) => {
+    setLocalUser(null);
+    setAuthStoreUser({}); // Clear user in AuthStore
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
+    navigate('/auth');
+  };
+
+  const updateProfile = async (_userData: Partial<User>) => {
+    setLoading(true);
+    try {
+      if (!user) throw new Error('Not authenticated');
+      console.warn("updateProfile functionality is not yet implemented in AuthService.", _userData);
+      // const updatedUser = await AuthService.updateProfile(user.id, userData, token);
+      // setUser(updatedUser);
+      // localStorage.setItem('user', JSON.stringify(updatedUser));
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout }}>
+    <AuthContext.Provider 
+      value={{
+        user: user, // Use local user state
+        loading, // Make sure to include loading here
+        login,
+        register,
+        logout,
+        updateProfile,
+        isAuthenticated: !!user,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
@@ -45,7 +103,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
 export const useAuth = () => {
   const context = useContext(AuthContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');
   }
   return context;
